@@ -12,12 +12,23 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 	public ArduinoManager arduinoCmd;
 	public string userName;
 
+	private float duration = 0.25f;
+	public int frequency, intensity;
 	[Serializable]
 	public enum direction
 	{
 		ASCENDING,
 		DESCENDING
 	}
+
+	[Serializable]
+	public enum positionStimuli
+	{
+		FINGER,
+		PALM
+	}
+
+	public positionStimuli positionXP;
 
 	[Serializable]
 	public struct serieStimulus
@@ -52,7 +63,7 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 	private bool start;
 
 	public List<(int, int, string, int, int)> resultsAToWrite, resultsBToWrite;
-
+	private int count;
 
 
     // Start is called before the first frame update
@@ -285,7 +296,8 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 							}
 						}
 
-						
+						WriteResults(resultsAToWrite, "resultsA");
+
 						
 						// consignes.text = "Press Enter to start the stimuli.";
 						// Debug.Log("Now Serie B.");
@@ -334,6 +346,8 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 
 
 							Debug.Log("NumTrials " + nbTrials);
+							WriteResults(resultsBToWrite, "resultsB");
+
 							nbTrials = oldTrial + 1;
 							// state = 0;
 						}
@@ -383,6 +397,8 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 						// consignes.text = "Press Enter to start the stimuli.";
 
 						Debug.Log("NumTrials " + nbTrials);
+						WriteResults(resultsBToWrite, "resultsB");
+
 						nbTrials = oldTrial + 1;
 						// state = 0;
 					}
@@ -422,6 +438,7 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 							// consignes.text = "Press Enter to start the stimuli.";
 							Debug.Log("Now Serie B.");
 							Debug.Log("NumTrials " + nbTrials);
+							WriteResults(resultsAToWrite, "resultsA");
 							nbTrials = oldTrial + 1;
 						}
 					}
@@ -432,8 +449,8 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 				if((serieA.reversal == nbMaxReversals) && (serieB.reversal == nbMaxReversals))
 				{
 					consignes.text = "Experiment is over. Thank you!";
-					WriteResults(resultsAToWrite, "resultsA");
-					WriteResults(resultsBToWrite, "resultsB");
+					// WriteResults(resultsAToWrite, "resultsA");
+					// WriteResults(resultsBToWrite, "resultsB");
 
 					Debug.Break();
 				}
@@ -463,7 +480,9 @@ public class AlternatedStaircaseDesign : MonoBehaviour
     		Debug.Log("Trial: " + nbTrials + "; Serie B. Delay: " + delayToSend + "; NbReversal: " + serieB.reversal);
     	}
     	// Serial communication send delayToSend;
-    	arduinoCmd.writeToArduino("11 1 30 50 137 " + delayToSend);
+		string toArduino = "11 1 " + intensity + " " + frequency + " " + (int)(frequency*duration) + " " + delayToSend;
+    	arduinoCmd.writeToArduino(toArduino);
+		Debug.Log(toArduino);
     	yield return new WaitForSeconds(1.0f);
     	finishedTesting = true;
 
@@ -473,11 +492,13 @@ public class AlternatedStaircaseDesign : MonoBehaviour
     {
     	if(serieID == "resultsA")
     	{
-	    	path = "Assets/Resources/DataCollection/TemporalStaircase-" + userName + "-" + time0 + "-SerieA.csv";
+	    	path = "Assets/Resources/DataCollection/TemporalStaircase-" + userName + "-Freq" + frequency + "-Position" + positionXP.ToString() + "-" + time0 + "-SerieA.csv";
+			count = resultsAToWrite.Count - 1;
     	}
     	else
     	{
-	    	path = "Assets/Resources/DataCollection/TemporalStaircase-" + userName + "-" + time0 + "-SerieB.csv";
+	    	path = "Assets/Resources/DataCollection/TemporalStaircase-" + userName + "-Freq" + frequency + "-Position" + positionXP.ToString() + "-" + time0 + "-SerieB.csv";
+			count = resultsBToWrite.Count - 1;
     	}
 
     	if(state == -1)
@@ -489,10 +510,12 @@ public class AlternatedStaircaseDesign : MonoBehaviour
     	else
     	{
     		writer = new StreamWriter(path, true);
-    		for(int i = 0; i < results.Count; i++)
-			{
-				writer.WriteLine(results[i].Item1 + ";" + results[i].Item2 + ";" + results[i].Item3 + ";" + results[i].Item4 + ";" + results[i].Item5);
-			}
+			writer.WriteLine(results[count].Item1 + ";" + results[count].Item2 + ";" + results[count].Item3 + ";" + results[count].Item4 + ";" + results[count].Item5);
+
+    		// for(int i = 0; i < results.Count; i++)
+			// {
+			// 	writer.WriteLine(results[i].Item1 + ";" + results[i].Item2 + ";" + results[i].Item3 + ";" + results[i].Item4 + ";" + results[i].Item5);
+			// }
 			writer.Close();
     	}
     }

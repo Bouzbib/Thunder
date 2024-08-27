@@ -1205,7 +1205,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arduinoCmd: {fileID: 0}
-  userName: 
+  userName: user00
+  frequency: 45
+  intensity: 30
+  positionXP: 0
   nbMaxReversals: 4
   serieA:
     currentDelay: 0
@@ -1219,7 +1222,7 @@ MonoBehaviour:
     incrementDelay: 0
     currentDirection: 
     reversal: 0
-  startDelaySerieA: 40
+  startDelaySerieA: 200
   startDelaySerieB: 1
   materialChoosing: {fileID: 2100000, guid: 23d2d158f197e4949905e8e1cb9b6405, type: 2}
   materialNoChoice: {fileID: 2100000, guid: b055f103e4e06464791a80ca53589212, type: 2}
@@ -1253,7 +1256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   reset: 0
-  arduinoCOM: 
+  arduinoCOM: 10
   looping: 1
   boardConnected: 0
 --- !u!1660057539 &9223372036854775807
