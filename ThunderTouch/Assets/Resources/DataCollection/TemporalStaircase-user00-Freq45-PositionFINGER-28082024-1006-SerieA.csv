@@ -1,0 +1,6 @@
+TrialID;CurrentDelay;CurrentDirection;NbReversal;OneOrMoreStimulus
+0;200;DESCENDING;0;0
+2;205;ASCENDING;1;1
+4;200;DESCENDING;2;1
+6;195;DESCENDING;2;0
+8;200;ASCENDING;3;1

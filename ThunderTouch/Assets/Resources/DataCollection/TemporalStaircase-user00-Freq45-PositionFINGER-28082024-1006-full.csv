@@ -1,0 +1,14 @@
+TrialID;CurrentDelay;CurrentDirection;NbReversal;OneOrMoreStimulus;Serie
+0;200;DESCENDING;0;0;serieA
+1;1;ASCENDING;0;0;serieB
+2;205;ASCENDING;1;1;serieA
+3;6;ASCENDING;0;0;serieB
+4;200;DESCENDING;2;1;serieA
+5;11;ASCENDING;0;1;serieB
+6;195;DESCENDING;2;0;serieA
+7;6;DESCENDING;1;1;serieB
+8;200;ASCENDING;3;1;serieA
+9;1;DESCENDING;1;0;serieB
+10;6;ASCENDING;2;1;serieB
+11;1;DESCENDING;3;1;serieB
+12;-4;DESCENDING;3;0;serieB

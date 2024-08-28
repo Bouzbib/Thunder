@@ -63,6 +63,7 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 	private bool start;
 
 	public List<(int, int, string, int, int)> resultsAToWrite, resultsBToWrite;
+	public List<(int, int, string, int, int, string)> fullResults;
 	private int count;
 
 
@@ -89,10 +90,13 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 
     	resultsAToWrite = new List<(int, int, string, int, int)> {};
 		resultsBToWrite = new List<(int, int, string, int, int)> {};
+		fullResults = new List<(int, int, string, int, int, string)> {};
 
 
     	WriteResults(resultsAToWrite, "resultsA");
 		WriteResults(resultsBToWrite, "resultsB");
+		WriteFullResults(fullResults);
+
 
     }
 
@@ -267,6 +271,8 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 					if(serieA.reversal < nbMaxReversals)
 					{
 						resultsAToWrite.Add((nbTrials, serieA.currentDelay, serieA.currentDirection, serieA.reversal, oneStimulus));
+						fullResults.Add((nbTrials, serieA.currentDelay, serieA.currentDirection, serieA.reversal, oneStimulus, "serieA"));
+
 						if(serieA.currentDirection == direction.DESCENDING.ToString())
 						{
 							if(oneStimulus == 0)
@@ -297,6 +303,7 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 						}
 
 						WriteResults(resultsAToWrite, "resultsA");
+						WriteFullResults(fullResults);
 
 						
 						// consignes.text = "Press Enter to start the stimuli.";
@@ -312,6 +319,8 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 						if(serieB.reversal < nbMaxReversals)
 						{
 							resultsBToWrite.Add((nbTrials, serieB.currentDelay, serieB.currentDirection, serieB.reversal, oneStimulus));
+							fullResults.Add((nbTrials, serieB.currentDelay, serieB.currentDirection, serieB.reversal, oneStimulus, "serieB"));
+
 							if(serieB.currentDirection == direction.DESCENDING.ToString())
 							{
 								if(oneStimulus == 0)
@@ -347,6 +356,8 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 
 							Debug.Log("NumTrials " + nbTrials);
 							WriteResults(resultsBToWrite, "resultsB");
+							WriteFullResults(fullResults);
+
 
 							nbTrials = oldTrial + 1;
 							// state = 0;
@@ -365,6 +376,8 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 					if(serieB.reversal < nbMaxReversals)
 					{
 						resultsBToWrite.Add((nbTrials, serieB.currentDelay, serieB.currentDirection, serieB.reversal, oneStimulus));
+						fullResults.Add((nbTrials, serieB.currentDelay, serieB.currentDirection, serieB.reversal, oneStimulus, "serieB"));
+
 						if(serieB.currentDirection == direction.DESCENDING.ToString())
 						{
 							if(oneStimulus == 0)
@@ -398,6 +411,7 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 
 						Debug.Log("NumTrials " + nbTrials);
 						WriteResults(resultsBToWrite, "resultsB");
+						WriteFullResults(fullResults);
 
 						nbTrials = oldTrial + 1;
 						// state = 0;
@@ -407,6 +421,8 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 						if(serieA.reversal < nbMaxReversals)
 						{
 							resultsAToWrite.Add((nbTrials, serieA.currentDelay, serieA.currentDirection, serieA.reversal, oneStimulus));
+							fullResults.Add((nbTrials, serieA.currentDelay, serieA.currentDirection, serieA.reversal, oneStimulus, "serieA"));
+
 							if(serieA.currentDirection == direction.DESCENDING.ToString())
 							{
 								if(oneStimulus == 0)
@@ -439,6 +455,8 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 							Debug.Log("Now Serie B.");
 							Debug.Log("NumTrials " + nbTrials);
 							WriteResults(resultsAToWrite, "resultsA");
+							WriteFullResults(fullResults);
+
 							nbTrials = oldTrial + 1;
 						}
 					}
@@ -480,6 +498,10 @@ public class AlternatedStaircaseDesign : MonoBehaviour
     		Debug.Log("Trial: " + nbTrials + "; Serie B. Delay: " + delayToSend + "; NbReversal: " + serieB.reversal);
     	}
     	// Serial communication send delayToSend;
+    	if(delayToSend < 1)
+    	{
+    		delayToSend = 1;
+    	}
 		string toArduino = "11 1 " + intensity + " " + frequency + " " + (int)(frequency*duration) + " " + delayToSend;
     	arduinoCmd.writeToArduino(toArduino);
 		Debug.Log(toArduino);
@@ -516,6 +538,26 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 			// {
 			// 	writer.WriteLine(results[i].Item1 + ";" + results[i].Item2 + ";" + results[i].Item3 + ";" + results[i].Item4 + ";" + results[i].Item5);
 			// }
+			writer.Close();
+    	}
+    }
+
+
+    void WriteFullResults(List<(int, int, string, int, int, string)> results)
+    {
+    	path = "Assets/Resources/DataCollection/TemporalStaircase-" + userName + "-Freq" + frequency + "-Position" + positionXP.ToString() + "-" + time0 + "-full.csv";
+		count = fullResults.Count - 1;
+    	
+    	if(state == -1)
+    	{
+    		writer = new StreamWriter(path, true);
+			writer.WriteLine("TrialID;CurrentDelay;CurrentDirection;NbReversal;OneOrMoreStimulus;Serie");
+			writer.Close();
+    	}
+    	else
+    	{
+    		writer = new StreamWriter(path, true);
+			writer.WriteLine(results[count].Item1 + ";" + results[count].Item2 + ";" + results[count].Item3 + ";" + results[count].Item4 + ";" + results[count].Item5 + ";" + results[count].Item6);
 			writer.Close();
     	}
     }
