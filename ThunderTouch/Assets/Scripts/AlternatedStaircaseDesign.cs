@@ -12,7 +12,7 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 	public ArduinoManager arduinoCmd;
 	public string userName;
 
-	private float duration = 0.25f;
+	private float duration = 0.15f;
 	public int frequency, intensity;
 	[Serializable]
 	public enum direction
@@ -107,8 +107,8 @@ public class AlternatedStaircaseDesign : MonoBehaviour
     	{
 	    	GameObject.Find("ButtonLeft").GetComponent<MeshRenderer>().enabled = true;
 			GameObject.Find("ButtonRight").GetComponent<MeshRenderer>().enabled = true;
-    		GameObject.Find("ButtonLeft").GetComponentInChildren<TextMeshPro>().text = "One";
-	    	GameObject.Find("ButtonRight").GetComponentInChildren<TextMeshPro>().text = "Two \n or More";
+    		GameObject.Find("ButtonLeft").GetComponentInChildren<TextMeshPro>().text = "Uno";
+	    	GameObject.Find("ButtonRight").GetComponentInChildren<TextMeshPro>().text = "Dos \n o Mas";
     	}
     	else
     	{
@@ -121,7 +121,7 @@ public class AlternatedStaircaseDesign : MonoBehaviour
     	switch(state)
     	{
     		case -1:
-    			consignes.text = "In this experiment you'll perceive different types of stimuli. \nYou'll have to tell us whether you felt one stimulus or more stimuli, \ne.g. two or more. \n Press Enter to continue.";
+    			consignes.text = "En ese experiencia, vas a recibir differentes tipos de estimulos. \nTienes que responder si has sentido uno o mas estimulos, \ne.g. dos o mas. \n Pulsa Entrada para seguir.";
     			if(Input.GetKeyDown(KeyCode.KeypadEnter))
 				{
 					state = 0;
@@ -140,7 +140,7 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 
     			showButtons = false;
     			oneStimulus = -1;
-				consignes.text = "Press Enter to start the stimuli.";
+				consignes.text = "Pulsa Entrada para empezar la experiencia.";
 
 				if(Input.GetKeyDown(KeyCode.KeypadEnter))
 				{
@@ -237,12 +237,12 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 					GameObject.Find("ButtonLeft").GetComponent<MeshRenderer>().material = materialNoChoice;	
 					oneStimulus = -1;		
 				}
-				consignes.text = "I felt ONE or MORE stimulus. \n Select your answer with the L/R arrows. Press Enter to confirm.";
+				consignes.text = "He sentido UNO o MAS estimulo. \n Elige tu respuesta con las I/D flechas. Pulsa Entrada para confirmar.";
 
-				if(Input.GetKeyDown(KeyCode.Keypad0))
-				{
-					state = 0;
-				}
+				// if(Input.GetKeyDown(KeyCode.Keypad0))
+				// {
+				// 	state = 0;
+				// }
 				if(Input.GetKeyDown(KeyCode.Space))
 				{
 					state = 2;
@@ -250,7 +250,7 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 				break;
 
 			case 2:
-				consignes.text = "Press 0 to go back. Press Enter to confirm your answer.";
+				consignes.text = "Pulsa 0 para volver. Pulsa Entrada para confirmar tu respuesta.";
 				if(Input.GetKeyDown(KeyCode.Keypad0))
 				{
 					state = 1;
@@ -466,7 +466,7 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 
 				if((serieA.reversal == nbMaxReversals) && (serieB.reversal == nbMaxReversals))
 				{
-					consignes.text = "Experiment is over. Thank you!";
+					consignes.text = "La experiencia esta acabado. ¡Gracias!";
 					// WriteResults(resultsAToWrite, "resultsA");
 					// WriteResults(resultsBToWrite, "resultsB");
 
@@ -474,7 +474,7 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 				}
 				else
 				{
-					consignes.text = "Press Enter to start the stimuli.";
+					consignes.text = "Pulsa Entrada para empezar el estimulo.";
 					state = 0;
 				}
 
@@ -485,6 +485,7 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 
     IEnumerator LaunchStimulus(string serieID)
     {
+    	yield return new WaitForSeconds(1.0f);
     	int delayToSend;
     	start = false;
     	if(serieID == "serieA")
