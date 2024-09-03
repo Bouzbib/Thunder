@@ -485,7 +485,7 @@ public class AlternatedStaircaseDesign : MonoBehaviour
 
     IEnumerator LaunchStimulus(string serieID)
     {
-    	yield return new WaitForSeconds(1.0f);
+    	// yield return new WaitForSeconds(1.0f);
     	int delayToSend;
     	start = false;
     	if(serieID == "serieA")
